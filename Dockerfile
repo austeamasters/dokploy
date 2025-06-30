@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 RUN apt-get update && apt-get install -y python3 make g++ git python3-pip pkg-config libsecret-1-dev && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies
-RUN --mount=type=cache,id=s/68d9346e-0761-4c94-bb62-16f42d19cc6d-pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Deploy only the dokploy app
 
@@ -39,9 +39,10 @@ COPY --from=build /prod/dokploy/next.config.mjs ./next.config.mjs
 COPY --from=build /prod/dokploy/public ./public
 COPY --from=build /prod/dokploy/package.json ./package.json
 COPY --from=build /prod/dokploy/drizzle ./drizzle
-# COPY .env.production ./.env
+COPY .env.production ./.env
 COPY --from=build /prod/dokploy/components.json ./components.json
 COPY --from=build /prod/dokploy/node_modules ./node_modules
+
 
 # Install docker
 RUN curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && rm get-docker.sh && curl https://rclone.org/install.sh | bash
@@ -60,7 +61,7 @@ ARG RAILPACK_VERSION=0.0.64
 RUN curl -sSL https://railpack.com/install.sh | bash
 
 # Install buildpacks
-# COPY --from=buildpacksio/pack:0.35.0 /usr/local/bin/pack /usr/local/bin/pack
+COPY --from=buildpacksio/pack:0.35.0 /usr/local/bin/pack /usr/local/bin/pack
 
 EXPOSE 3000
 CMD [ "pnpm", "start" ]

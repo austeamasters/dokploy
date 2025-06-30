@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 RUN apt-get update && apt-get install -y python3 make g++ git python3-pip pkg-config libsecret-1-dev && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,cache_key=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Deploy only the dokploy app
 
@@ -42,7 +42,6 @@ COPY --from=build /prod/dokploy/drizzle ./drizzle
 COPY .env.production ./.env
 COPY --from=build /prod/dokploy/components.json ./components.json
 COPY --from=build /prod/dokploy/node_modules ./node_modules
-
 
 # Install docker
 RUN curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh && rm get-docker.sh && curl https://rclone.org/install.sh | bash

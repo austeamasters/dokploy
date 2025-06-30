@@ -39,7 +39,7 @@ COPY --from=build /prod/dokploy/next.config.mjs ./next.config.mjs
 COPY --from=build /prod/dokploy/public ./public
 COPY --from=build /prod/dokploy/package.json ./package.json
 COPY --from=build /prod/dokploy/drizzle ./drizzle
-COPY .env.production ./.env
+# COPY .env.production ./.env
 COPY --from=build /prod/dokploy/components.json ./components.json
 COPY --from=build /prod/dokploy/node_modules ./node_modules
 
@@ -60,7 +60,7 @@ ARG RAILPACK_VERSION=0.0.64
 RUN curl -sSL https://railpack.com/install.sh | bash
 
 # Install buildpacks
-COPY --from=buildpacksio/pack:0.35.0 /usr/local/bin/pack /usr/local/bin/pack
+# COPY --from=buildpacksio/pack:0.35.0 /usr/local/bin/pack /usr/local/bin/pack
 
 EXPOSE 3000
 CMD [ "pnpm", "start" ]

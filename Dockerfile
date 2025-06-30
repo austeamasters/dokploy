@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 RUN apt-get update && apt-get install -y python3 make g++ git python3-pip pkg-config libsecret-1-dev && rm -rf /var/lib/apt/lists/*
 
 # Install dependencies
-RUN --mount=type=cache,cache_key=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=s/68d9346e-0761-4c94-bb62-16f42d19cc6d-pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Deploy only the dokploy app
 
